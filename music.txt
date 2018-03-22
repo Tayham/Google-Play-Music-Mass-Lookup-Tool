@@ -1,0 +1,3 @@
+PUT SONGS TO LOOKUP HERE SEPARATED BY LINES:
+example artist - example song
+example artist2 - example song
