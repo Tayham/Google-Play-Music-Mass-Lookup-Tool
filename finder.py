@@ -42,7 +42,12 @@ def input_number(message, max_value):
 
 
 #  GET LOGIN INFORMATION FROM "login.txt" AND LOGIN
-with io.open(os.path.join(sys.path[0], "login.txt"), "r") as login:
+
+# UNCOMMENT BELOW TO USE login.txt IN THIS DIRECTORY
+# with io.open(os.path.join(sys.path[0], "login.txt"), "r") as login:
+
+# COMMENT BELOW TO USE login.txt IN THIS DIRECTORY
+with io.open('C:/login.txt', "r") as login:
     credentials = login.readlines()
     print("Logged In: ")
 
@@ -51,7 +56,12 @@ with io.open(os.path.join(sys.path[0], "login.txt"), "r") as login:
 login.close()
 
 # IMPORT MUSIC TO AN ARRAY
-with io.open(os.path.join(sys.path[0], "music.txt"), "r") as text_file:
+
+# UNCOMMENT BELOW TO USE music.txt IN THIS DIRECTORY
+# with io.open(os.path.join(sys.path[0], "music.txt"), "r") as text_file:
+
+# COMMENT BELOW TO USE music.txt IN THIS DIRECTORY
+with io.open('C:/music.txt', "r") as text_file:
     musicList = text_file.readlines()
     print(musicList)
     print("Amount of Songs to look-up: " + str(len(musicList)))
