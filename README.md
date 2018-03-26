@@ -18,7 +18,7 @@ ___
      
     
 * ### music.txt
-    * Add the text lookups you want to preform with each seperate music search query seperated by a newline.
+    * Add the text lookups you want to perform with each seperate music search query seperated by a newline.
 ## Packages Needed
 * [Unofficial Google Play Music API](https://github.com/simon-weber/gmusicapi) - [Installation instructions](http://unofficial-google-music-api.readthedocs.io/en/latest/usage.html#usage)
  ```$ pip install gmusicapi```
