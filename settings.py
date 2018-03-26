@@ -23,14 +23,8 @@ class Settings:
                 dictionary[option] = None
         return dictionary
 
-    def check_for_login_path(self):
-        if self.section('Login')['loginpath']:  # if LoginPath is not blank
-            return True
-        else:
-            return False
-
-    def check_for_music_path(self):
-        if self.section('Directory')['musicpath']:  # if MusicPath is not blank
+    def check_for_attribute(self, section, attribute):
+        if self.section(section)[attribute]:  # if LoginPath is not blank
             return True
         else:
             return False

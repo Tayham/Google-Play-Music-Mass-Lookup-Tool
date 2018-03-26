@@ -13,10 +13,13 @@ from settings import Settings
 class GooglePlayMusic:
     g_music = Mobileclient()
 
-    def __init__(self, credentials):
+    def __init__(self, credentials, id):
         print("Logging In.... ")
-        print('Logged in: ' + str(
-            self.g_music.login(credentials[0], credentials[1], Mobileclient.FROM_MAC_ADDRESS)))  # True if successful
+        if id:
+            print('Logged in (using mobile id): ' + str(self.g_music.login(credentials[0], credentials[1], id)))  # True if successful
+        else:
+            print('Logged in (using device mac): ' + str(
+                self.g_music.login(credentials[0], credentials[1], Mobileclient.FROM_MAC_ADDRESS)))  # True if successful
 
     # GET RESULTS FOR SONG
     def song_search(self, song):
@@ -43,3 +46,6 @@ class GooglePlayMusic:
 
     def logout(self):
         return self.g_music.logout()
+
+    def get_registered_devices(self):
+        return self.g_music.get_registered_devices()

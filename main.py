@@ -7,12 +7,14 @@ from api import GooglePlayMusic
 from settings import Settings
 
 # TODO: DIRECT IMPORT TEXT FROM YOUTUBE / SOUNDCLOUD
+# TODO: OPEN SONG STREAMS IN CONSOLE NOT IN BROWSER
 # TODO: AUTOMATICALLY ADD LIKED SONGS TO LIBRARY FOR CERTAIN PLAYLIST FUNCTION
 # TODO: SAVE ADDED SONGS TO A TEXT FILE FOR TRACKING
 
 # VARIABLES
 settings = Settings()
 results = music.Results()
+
 
 def yes_or_no(question):
     while "the answer is invalid":
@@ -38,19 +40,23 @@ def input_number(message, max_value):
 
 
 #  GET LOGIN INFORMATION AND LOGIN
-if settings.check_for_login_path():  # If there is a specified login path in settings.ini
+if settings.check_for_attribute('Login', 'loginpath'):  # If there is a specified login path in settings.ini
     login_path = settings.section('Login')['loginpath']
     with io.open(login_path, "r") as login_file:
         credentials = login_file.readlines()
-        g_music = GooglePlayMusic(credentials)
     login_file.close()
 else:
     credentials = [settings.section('Login')['username'], settings.section('Login')['password']]
-    g_music = GooglePlayMusic(credentials)
+if settings.check_for_attribute('Login', 'mobileid'):
+    device_id = settings.section('Login')['mobileid']
+else:
+    device_id = ''
+
+g_music = GooglePlayMusic(credentials, device_id)
 
 if g_music.is_logged_in():
     # IMPORT MUSIC TO AN ARRAY
-    if settings.check_for_music_path():  # If there is a specified login path in settings.ini
+    if settings.check_for_attribute('Directory', 'musicpath'):  # If there is a specified music path in settings.ini
         music_path = settings.section('Directory')['musicpath']
     else:
         music_path = os.path.join(sys.path[0], "music.txt")
