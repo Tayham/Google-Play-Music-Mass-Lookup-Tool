@@ -22,11 +22,20 @@ class Song:
     def open_link(self):
         webbrowser.open(self.link)  # Open browser to song stream link
 
+    def __init__(self, s):
+        info = (s['artist'] + ' - ' + s['title'] + ' (' + s['album'] + ' - ' + s['albumArtist'] + ')')
+        if s['explicitType'] == '1':
+            info = info + " [EXPLICIT]"
+        self.info = info
+        self.storeId = s['storeId']
+
 
 class Results:
-    results = []
-
-    # def __init__(self):
+    def __init__(self):
+        self.results = []
 
     def add_result(self, song, operation):
-        self.results.append(song.description() + " " + operation)
+        self.results.append(operation + ": " + song.description())
+
+    def display_results(self):
+        print(self.results)

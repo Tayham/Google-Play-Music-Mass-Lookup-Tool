@@ -6,9 +6,13 @@ import music
 from api import GooglePlayMusic
 from settings import Settings
 
+# TODO: DIRECT IMPORT TEXT FROM YOUTUBE / SOUNDCLOUD
+# TODO: AUTOMATICALLY ADD LIKED SONGS TO LIBRARY FOR CERTAIN PLAYLIST FUNCTION
+# TODO: SAVE ADDED SONGS TO A TEXT FILE FOR TRACKING
+
 # VARIABLES
 settings = Settings()
-use_this_directory = False
+results = music.Results()
 
 def yes_or_no(question):
     while "the answer is invalid":
@@ -44,38 +48,47 @@ else:
     credentials = [settings.section('Login')['username'], settings.section('Login')['password']]
     g_music = GooglePlayMusic(credentials)
 
-# IMPORT MUSIC TO AN ARRAY
-if settings.check_for_music_path():  # If there is a specified login path in settings.ini
-    music_path = settings.section('Directory')['musicpath']
-else:
-    music_path = os.path.join(sys.path[0], "music.txt")
+if g_music.is_logged_in():
+    # IMPORT MUSIC TO AN ARRAY
+    if settings.check_for_music_path():  # If there is a specified login path in settings.ini
+        music_path = settings.section('Directory')['musicpath']
+    else:
+        music_path = os.path.join(sys.path[0], "music.txt")
 
-with io.open(music_path, "r") as music_file:
-    music_list = music_file.readlines()
-    print(music_list)
-    print("Amount of Songs to look-up: " + str(len(music_list)))
-login_file.close()
+    with io.open(music_path, "r") as music_file:
+        music_list = music_file.readlines()
+        print(music_list)
+        print("Amount of Songs to look-up: " + str(len(music_list)))
+    login_file.close()
 
-# NORMALIZE
-if yes_or_no("Try to normalize the input data?"):
+    # NORMALIZE
+    if yes_or_no("Try to normalize the input data?"):
+        for i in range(0, len(music_list)):
+            music_list[i] = music.normalize(music_list[i])
+
     for i in range(0, len(music_list)):
-        music_list[i] = music.normalize(music_list[i])
-
-for i in range(0, len(music_list)):
-    song_list = g_music.song_search(music_list[i])
-    # PICK WHICH SONG FROM RESULTS TO STREAM
-    song_to_add = 1  # Reset songToAdd
-    while song_to_add != 0:
-        song_to_add = int(input_number("What song to play? 0 to cancel\n", len(song_list)))
-        if song_to_add != 0:
-            s = song_list[song_to_add - 1]
-            print(s.description())
-            s.open_link()
-            if yes_or_no("Add to library?"):
-                g_music.add_store_tracks(s.storeId)
-
-    # TODO: SAVE ADDED SONGS TO A TEXT FILE FOR TRACKING
-
-print("~~~ Finished ~~~")
-print("Logging Out...")
-print('Logged in: ' + str(g_music.logout()))  # True if successful logout
+        song_list = g_music.song_search(music_list[i])
+        if len(song_list) > 0:  # If there are search results
+            # PICK WHICH SONG FROM RESULTS TO STREAM
+            song_to_add = 1  # Reset songToAdd
+            while song_to_add != 0:
+                song_to_add = int(input_number("What song to select? 0 to cancel\n", len(song_list)))
+                if song_to_add != 0:
+                    s = song_list[song_to_add - 1]
+                    if yes_or_no("Play song?"):
+                        print("PLAYING: " + s.description())
+                        s.open_link()
+                    if yes_or_no("Add to library?"):
+                        s.storeId = g_music.add_store_tracks(s.storeId)
+                        print("Library Track ID: " + str(s.storeId))
+                        results.add_result(s, "ADDED TO LIBRARY")
+                        results.display_results()
+                        song_to_add = 0
+        else:
+            print("NO RESULTS FOR THAT SEARCH... SEARCHING NEXT SONG\n")
+    print("~~~ Finished ~~~")
+    results.display_results()
+    print("Logging Out...")
+    print('Logged in: ' + str(g_music.logout()))  # True if successful logout
+else:
+    print("LOGIN FAILED")

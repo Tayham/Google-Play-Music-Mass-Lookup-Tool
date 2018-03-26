@@ -28,14 +28,18 @@ class GooglePlayMusic:
         search_result_songs = search_result['song_hits']
         for track in search_result_songs:
             track_info = track['track']
-            current_track = Song()
-            current_track.info = (track_info['artist'] + ' - ' + track_info['title'])
+            current_track = Song(track_info)
             current_track.link = self.g_music.get_stream_url(track_info['storeId'], device_id=None, quality=u'hi')
-            current_track.storeId = track_info['storeId']
             song_list.append(current_track)
             print(str(counter) + ': ' + current_track.description())
             counter = counter + 1
         return song_list
 
-    def add_store_tracks(self, storeId):
-        self.g_music.add_store_tracks(storeId)
+    def add_store_tracks(self, store_id):
+        return self.g_music.add_store_tracks(store_id)
+
+    def is_logged_in(self):
+        return self.g_music.is_authenticated()
+
+    def logout(self):
+        return self.g_music.logout()
