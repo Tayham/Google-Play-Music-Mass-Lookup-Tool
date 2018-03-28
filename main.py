@@ -49,6 +49,8 @@ else:
     credentials = [settings.section('Login')['username'], settings.section('Login')['password']]
 if settings.check_for_attribute('Login', 'mobileid'):
     device_id = settings.section('Login')['mobileid']
+elif len(credentials) == 3:
+    device_id = credentials[2]
 else:
     device_id = ''
 
@@ -65,7 +67,7 @@ if g_music.is_logged_in():
         music_list = music_file.readlines()
         print(music_list)
         print("Amount of Songs to look-up: " + str(len(music_list)))
-    login_file.close()
+    music_file.close()
 
     # NORMALIZE
     if yes_or_no("Try to normalize the input data?"):
