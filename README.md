@@ -2,7 +2,7 @@
 A command line tool written in Python to lookup a mass amount of songs on Google Play Music to see if they are available on the service. Useful if you want to import a Youtube or Soundcloud playlist to Google Play Music. Made possible by Simon Weber and his awesome [Unofficial Google Play Music API](https://github.com/simon-weber/gmusicapi)
 ___
 ## Setup & Information
-*This tool preforms **TEXT LOOK-UP ONLY** and does not preform audio matching.*
+*This tool performs **TEXT LOOK-UP ONLY** and does not preform audio matching.*
 * ### settings.ini
    * #### Login
       * Replace ```MyUsername``` with your Google User Name
